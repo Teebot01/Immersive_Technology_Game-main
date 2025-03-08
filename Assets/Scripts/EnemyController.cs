@@ -5,22 +5,22 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-    enum AIState
+    private enum AIState
     {
         Idle, Patrolling, Chasing
     }
 
     [Header("Patrol")]
-    [SerializeField] private Transform wayPoints;
+    [SerializeField] private Transform[] wayPoints;
     [SerializeField] private float waitAtPoint = 2f;
     private int currentWaypoint;
     private float waitCounter;
 
     [Header("Components")]
-    NavMeshAgent agent;
+    private NavMeshAgent agent;
 
     [Header("AI States")]
-    [SerializeField] private AIState currentState;
+    [SerializeField] private AIState currentState = AIState.Idle;
 
     [Header("Chasing")]
     [SerializeField] private float chaseRange;
@@ -30,46 +30,64 @@ public class EnemyController : MonoBehaviour
     private float timeSinceLastSawPlayer;
 
     private GameObject player;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        if (agent == null)
+        {
+            Debug.LogError("NavMeshAgent component is missing on " + gameObject.name);
+            return;
+        }
+
         player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogError("Player object with tag 'Player' not found!");
+            return;
+        }
+
+        if (wayPoints == null || wayPoints.Length == 0)
+        {
+            Debug.LogError("No waypoints assigned to EnemyController on " + gameObject.name);
+            return;
+        }
 
         waitCounter = waitAtPoint;
         timeSinceLastSawPlayer = suspiciousTime;
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (player == null) return;
+
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
         switch (currentState)
         {
             case AIState.Idle:
-
-                if(waitCounter > 0)
+                if (waitCounter > 0)
                 {
                     waitCounter -= Time.deltaTime;
                 }
                 else
                 {
                     currentState = AIState.Patrolling;
-                    agent.SetDestination(wayPoints.GetChild(currentWaypoint).position);
+                    agent.isStopped = false;
+                    agent.SetDestination(wayPoints[currentWaypoint].position);
                 }
 
                 if (distanceToPlayer <= chaseRange)
                 {
                     currentState = AIState.Chasing;
                 }
-
                 break;
 
             case AIState.Patrolling:
-
-                if(agent.remainingDistance <= 0.2f)
+                if (agent.remainingDistance <= 0.2f && !agent.pathPending)
                 {
                     currentWaypoint++;
-                    if(currentWaypoint >= wayPoints.childCount)
+                    if (currentWaypoint >= wayPoints.Length)
                     {
                         currentWaypoint = 0;
                     }
@@ -77,31 +95,32 @@ public class EnemyController : MonoBehaviour
                     waitCounter = waitAtPoint;
                 }
 
-                if(distanceToPlayer <= chaseRange)
+                if (distanceToPlayer <= chaseRange)
                 {
                     currentState = AIState.Chasing;
                 }
-
                 break;
 
             case AIState.Chasing:
-
+                agent.isStopped = false;
                 agent.SetDestination(player.transform.position);
+
                 if (distanceToPlayer > chaseRange)
                 {
                     agent.isStopped = true;
                     agent.velocity = Vector3.zero;
                     timeSinceLastSawPlayer -= Time.deltaTime;
 
-                    if(timeSinceLastSawPlayer <= 0)
+                    if (timeSinceLastSawPlayer <= 0)
                     {
-                        currentState = AIState.Idle;
+                        currentState = AIState.Patrolling;
                         timeSinceLastSawPlayer = suspiciousTime;
                         agent.isStopped = false;
+                        agent.SetDestination(wayPoints[currentWaypoint].position);
                     }
                 }
-
                 break;
         }
     }
 }
+
