@@ -5783,6 +5783,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wayPoints: {fileID: 591663250}
+  waitAtPoint: 2
+  currentState: 1
+  chaseRange: 0
+  suspiciousTime: 0
 --- !u!195 &1432825321
 NavMeshAgent:
   m_ObjectHideFlags: 0
