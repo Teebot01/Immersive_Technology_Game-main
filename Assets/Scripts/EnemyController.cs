@@ -102,11 +102,13 @@ public class EnemyController : MonoBehaviour
                 break;
 
             case AIState.Chasing:
+                ChangeSpeed(3.5f);
                 agent.isStopped = false;
                 agent.SetDestination(player.transform.position);
 
                 if (distanceToPlayer > chaseRange)
                 {
+                    ChangeSpeed(2f);
                     agent.isStopped = true;
                     agent.velocity = Vector3.zero;
                     timeSinceLastSawPlayer -= Time.deltaTime;
@@ -120,6 +122,15 @@ public class EnemyController : MonoBehaviour
                     }
                 }
                 break;
+        }
+    }
+
+    public void ChangeSpeed(float newSpeed)
+    {
+        if (agent != null)
+        {
+            agent.speed = newSpeed;
+            Debug.Log("Agent speed changed to: " + newSpeed);
         }
     }
 }
