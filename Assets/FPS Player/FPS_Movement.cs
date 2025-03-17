@@ -17,6 +17,9 @@ public class FPS_Movement : MonoBehaviour
     [SerializeField] LayerMask groundMask;
     public bool isGrounded;
 
+    public AudioSource audioSourceFootsteps;
+    public AudioClip footsteps;
+
     private void Update()
     {
         isGrounded = Physics.CheckSphere(transform.position - (new Vector3(0, transform.localScale.y, 0)), 0.2f, groundMask);
@@ -31,6 +34,8 @@ public class FPS_Movement : MonoBehaviour
 
         Vector3 horizontalV = (transform.right * horizontalInput.x + transform.forward * horizontalInput.y) * speed;
         controller.Move(horizontalV * Time.deltaTime);
+        audioSourceFootsteps.clip = footsteps;
+        audioSourceFootsteps.Play();
 
 
         if (jump)
@@ -45,6 +50,7 @@ public class FPS_Movement : MonoBehaviour
 
         
         controller.Move(verticalV * Time.deltaTime);
+
     }
 
     public void ReceiveInput (Vector2 _horizontalInput)
