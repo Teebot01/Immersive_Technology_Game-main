@@ -16,7 +16,7 @@ public class LightPower : MonoBehaviour
     public float powerIncrease = 0.5f;
     public float reductionInterval = 3.0f; // Time between reductions
     public float maxIntensity = 3.0f;
-    private Light thisLight;
+    public Light thisLight;
 
     void Start()
     {
