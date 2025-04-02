@@ -6283,9 +6283,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf4dab40824438146ab601e351945243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chargeFlashlight_L: {fileID: 6803718661762901227, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  chargeFlashlight_R: {fileID: 8682553121799310617, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  grabInteractable: {fileID: 1657272373}
   powerReduction: 0.2
   powerIncrease: 0.5
   reductionInterval: 3
+  maxIntensity: 3
 --- !u!1 &1595682313
 GameObject:
   m_ObjectHideFlags: 0
