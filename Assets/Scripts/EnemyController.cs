@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 
 public class EnemyController : MonoBehaviour
 {
@@ -129,7 +130,6 @@ public class EnemyController : MonoBehaviour
 
     private void HandleChasingState(float distanceToPlayer)
     {
-        ChangeSpeed(3.5f);
         agent.isStopped = false;
         agent.SetDestination(player.transform.position);
 
