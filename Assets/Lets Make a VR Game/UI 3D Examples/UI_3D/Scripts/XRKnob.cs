@@ -133,6 +133,10 @@ namespace UnityEngine.XR.Content.Interaction
 
         public int dropSpeed = 2;
 
+        public ValveManager valveCount;
+
+        private bool valveClosed = false;
+
         /// <summary>
         /// The object that is visually grabbed and manipulated
         /// </summary>
@@ -430,8 +434,16 @@ namespace UnityEngine.XR.Content.Interaction
         {
             if (m_Value >= 1f)
             {
-                // Move the stream downward at the specified drop speed
-                Stream.transform.position += Vector3.down * dropSpeed * Time.deltaTime;
+                if (!valveClosed) // Only increment once
+                {
+                    valveClosed = true;
+                    valveCount.closedValveCount++;
+                    Debug.Log("Closed Valve Count: " + valveCount.closedValveCount);
+                }
+
+                // Move the stream downward
+                if (Stream != null)
+                    Stream.transform.position += Vector3.down * dropSpeed * Time.deltaTime;
             }
         }
     }
