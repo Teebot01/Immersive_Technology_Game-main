@@ -31,11 +31,14 @@ public class WoodenPlank : MonoBehaviour
     {
         if(other.tag == "AxeHead")
         {
-            thisMeshRenderer.enabled = false;
-            thisBoxCollider.enabled = false;
-            thisTriggerBoxCollider.enabled = false;
-            isDestroyed = true;
-            parentAudioSource.Play();
+            if (other.tag == "AxeHead")
+            {
+                gameObject.SetActive(false); // disables all visuals and colliders
+                isDestroyed = true;
+
+                if (parentAudioSource != null)
+                    parentAudioSource.Play();
+            }
         }
     }
 }
