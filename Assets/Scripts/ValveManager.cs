@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ValveManager : MonoBehaviour
 {
@@ -14,9 +15,7 @@ public class ValveManager : MonoBehaviour
     {
         if(closedValveCount == closedValveRequirement)
         {
-            Debug.Log("All Valves Activated");
-            proofImage.enabled = true;
-
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 }
